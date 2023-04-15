@@ -1,0 +1,126 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background: Linear-gradient(to left top, #3675f5, #681475);
+	height: 95vh;
+	font-family: 'JetBrains Mono';
+}
+
+.calculator-form {
+	backdrop-filter: blur(5, 5px);
+	display: flex;
+	flex-direction: column;
+	align-content: center;
+	margin: 20px auto 0px auto;
+	background: rgba(242, 242, 242, 0.25);
+	border: none;
+	border-radius: 12px;
+	padding: 10px;
+	align-items: center;
+}
+
+.display-result {
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	width: 96%;
+	height: 40px;
+	margin-top: 5px;
+	margin-bottom: 8px;
+	background: white;
+	border: none;
+	border-radius: 10px;
+	text-align: right;
+	padding: 5px;
+}
+
+.bottons-containter {
+	display: grid;
+	grid-template-columns: repeat(4, 0.5fr);
+	gap: 8px;
+	padding: 5px;
+	width: 95%;
+}
+.number-button {
+	text-align: center;
+	display: inline-block;
+	padding: 9px;
+	color: white;
+	border: none;
+	background: #f2f2f259;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background 150ms;
+}
+
+.number-button:nth-child(16) {
+	grid-column-start: 1;
+	grid-column-end: 4;
+}
+
+.delete-button {
+	display: flex;
+	border-radius: 5px;
+	text-align: center;
+	background: #f2f2f259;
+	color: white;
+	align-items: center;
+	justify-content: center;
+	grid-column-start: 1;
+	grid-column-end: 3;
+	cursor: pointer;
+}
+
+.arrow-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+	background: #f2f2f259;
+	border-radius: 5px;
+	color: white;
+	cursor: pointer;
+}
+
+.operators-colunm {
+	display: inline-block;
+	padding: 9px;
+	border: none;
+	border-radius: 5px;
+	text-align: center;
+	color: white;
+	background: #24c484;
+	transition: background 150ms;
+	cursor: pointer;
+}
+
+@media screen and (min-width: 400px) {
+	.calculator-form {
+		width: 50%;
+	}
+}
+
+@media screen and (min-width: 600px) {
+	.calculator-form {
+		width: 30%;
+	}
+}
+
+.number-button:hover,
+.delete-button:hover,
+.arrow-button:hover {
+	background: #adadad59;
+}
+
+.operators-colunm:hover {
+	background: #1ca971;
+}
+
+.number-button:active,
+.delete-button:active,
+.arrow-button:active {
+	transform: translateY(1.5px);
+}
