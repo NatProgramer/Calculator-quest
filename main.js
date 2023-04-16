@@ -1,111 +1,92 @@
 let buffer = '0';
-let numbers = 0;
-let prevNum = 0;
-let operator;
+let totalForMost = 0;
+let prevNum = buffer.slice(0, -1);
+let previusOperator;
+
 // Obteniendo elementos del DOOM
 const display = document.querySelector('.display-result');
-const arrowBtn = document.querySelector('.arrow-button');
-const deleteBtn = document.querySelector('.delete-button');
-const numberBtns = document.querySelectorAll('.number-button');
-const mathSymbols = document.querySelectorAll('.operators-colunm');
-// Definiendo funciones
+const calcsButtons = document.querySelectorAll('.calc-buttons');
 
-// Funcion para insertar numeros en el display
-const insertNumbers = (value) => {
-	// Insertando Numeros en el display
-	if (buffer === '0') {
-		buffer = value;
+function obtainedClickedValor(value) {
+	if (isNaN(value)) {
+		obtainedSymbol(value);
 	} else {
-		buffer += value;
+		obtainedNumber(value);
 	}
 	display.innerHTML = buffer;
-};
-
-// Insertando simbolos en el display
-const insertSymbols = (symbol) => {
-	//Insertando simbolos en el display
-	if (numbers != '=') {
-		numbers += parseFloat(buffer);
-	}
+}
+function obtainedSymbol(symbol) {
 	switch (symbol) {
-		case '+':
-			operator = '+';
-			prevNum = numbers;
-			numbers += parseFloat(buffer);
+		case 'C':
 			buffer = '0';
-			break;
-		case '-':
-			operator = '-';
-			prevNum = numbers;
-			numbers -= parseFloat(buffer);
-			buffer = '0';
-			break;
-		case 'x':
-			operator = 'x';
-			// 20 x 5 = 405
-			// Numbers = 20
-			// BufferFloat = 5
-			//Numbers * bufferFloat = 20 * 20 + 5 = 405
-			prevNum = numbers;
-			numbers = numbers * parseFloat(buffer);
-			buffer = '0';
-			break;
-		case '÷':
-			operator = '÷';
-			prevNum = numbers;
-			numbers /= parseFloat(buffer);
-			buffer = '0';
+			totalForMost = 0;
 			break;
 		case '=':
-			if (operator == '+') {
-				display.innerHTML = numbers - prevNum + '=';
-				buffer = '0';
-			} else if (operator == '-') {
-				display.innerHTML = Math.abs(numbers - prevNum) + '=';
-				buffer = '0';
-			} else if (operator == 'x') {
-				display.innerHTML = numbers + '=';
-			} else {
-				display.innerHTML = `ERROR: ${prevNum} ${operator} ${buffer}`;
+			if (previusOperator === null) {
+				return;
 			}
+			flushOperation(parseInt(buffer));
+			previusOperator = null;
+			buffer = totalForMost;
+			totalForMost = 0;
+			break;
+		case '←':
+			if (buffer.length <= 1) {
+				buffer = '0';
+			}
+			buffer = prevNum;
+		case '+':
+		case '-':
+		case 'x':
+		case '÷':
+			handleMath(symbol);
 		default:
 			break;
 	}
-};
+}
 
-// Funcion para eliminar todo lo escrito anteriormente
-const deleteAll = () => {
-	buffer = '0';
-	numbers = 0;
-	display.innerHTML = buffer;
-};
-// Eliminando el valor anterior
-const deletePrevNumber = () => {
-	if (buffer.length == 1) {
-		buffer = '0';
-		numbers = 0;
-	} else {
-		buffer = buffer.slice(0, buffer.length - 1);
+function handleMath(symbol) {
+	if (buffer === '0') {
+		return;
 	}
-	display.innerHTML = buffer;
-};
+	const intBuffer = parseInt(buffer);
+	if (totalForMost == 0) {
+		totalForMost = intBuffer;
+	} else {
+		flushOperation(intBuffer);
+	}
 
-// Obteniendo los simbolos insertados por el usuario e insertandolos
-mathSymbols.forEach((mathSymbol) =>
-	mathSymbol.addEventListener('click', (e) => {
-		let symbolInsertForTheUser = e.target.innerHTML;
-		insertSymbols(symbolInsertForTheUser);
-		console.log(symbolInsertForTheUser);
-	})
-);
-// Obteniendo los numero insertados por el usuario e insertandolos
-numberBtns.forEach((numberBtn) =>
-	numberBtn.addEventListener('click', (e) => {
-		let numberInsertForTheUser = e.target.innerText;
-		insertNumbers(numberInsertForTheUser);
-	})
-);
+	previusOperator = symbol;
+	buffer = '0';
+}
 
-// Agregando eventos para eliminar todos los valores insertados
-deleteBtn.addEventListener('click', () => deleteAll());
-arrowBtn.addEventListener('click', () => deletePrevNumber());
+function flushOperation(intBuffer) {
+	if (previusOperator === '+') {
+		totalForMost += intBuffer;
+	} else if (previusOperator === '-') {
+		totalForMost -= intBuffer;
+	} else if (previusOperator === 'x') {
+		totalForMost *= intBuffer;
+	} else if (previusOperator === '÷') {
+		totalForMost /= intBuffer;
+	}
+}
+
+function obtainedNumber(numberStr) {
+	if (buffer == '0') {
+		buffer = numberStr;
+	} else {
+		buffer += numberStr;
+	}
+}
+
+function main() {
+	// Obteniendo los eventos de click de todos los botones
+	calcsButtons.forEach((calcButton) =>
+		calcButton.addEventListener('click', (e) => {
+			obtainedClickedValor(e.target.innerText);
+		})
+	);
+}
+
+main();
