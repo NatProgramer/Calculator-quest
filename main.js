@@ -1,6 +1,5 @@
 let buffer = '0';
 let totalForMost = 0;
-let prevNum = buffer.slice(0, -1);
 let previusOperator;
 
 // Obteniendo elementos del DOOM
@@ -31,15 +30,19 @@ function obtainedSymbol(symbol) {
 			totalForMost = 0;
 			break;
 		case '←':
-			if (buffer.length <= 1) {
+			if (buffer.length === 1) {
 				buffer = '0';
+			} else {
+				buffer = buffer.slice(0, buffer.length - 1);
 			}
-			buffer = prevNum;
+			display.innerHTML = buffer;
+			break;
 		case '+':
 		case '-':
 		case 'x':
 		case '÷':
 			handleMath(symbol);
+			break;
 		default:
 			break;
 	}
